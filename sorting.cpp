@@ -9,7 +9,7 @@ int sortedNumbers[SIZE];
 
 // Function declarations
 void sortHalf(int start, int end);
-void merge(int mid);
+void mergeArray(int mid);
 
 
 using namespace std;
@@ -24,10 +24,10 @@ int main() {
     sortThread1.join();
     sortThread2.join();
 
-    // TODO: place merge in a thread
-    // not working for me for some reason???
-
-    merge(mid);
+    // merge thread is created here
+    thread mergeThread(mergeArray, mid);
+    // merge thread is joined here
+    mergeThread.join();
 
 
     for (int i = 0; i < SIZE; i++) {
@@ -48,7 +48,7 @@ void sortHalf(int start, int end) {
 
 // TODO: implement merge algorithm 
 // Maybe you can come up with something better
-void merge(int mid) {
+void mergeArray(int mid) {
     int i = 0, j = mid, k = 0;
     while (i < mid && j < SIZE) {
         if (numbers[i] < numbers[j]) {
