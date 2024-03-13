@@ -13,7 +13,8 @@ void mergeArray(int mid);
 
 
 using namespace std;
-int main() {
+int main() 
+{
     int mid = SIZE / 2;
 
     // threads are created here
@@ -30,33 +31,50 @@ int main() {
     mergeThread.join();
 
 
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < SIZE; i++) 
+    {
         cout << numbers[i] << " ";
     }
 
 }
 
-// Function definitions
-
-
-// TODO: implement sorting algorithm
-// Maybe you can come up with something better
-void quickSort(int *arr, int left, int right) {
-    if (left < right) {
-        int pivot = arr[right];
-        int i = left - 1;
-        for (int j = left; j < right; j++) {
-            if (arr[j] < pivot) {
-                i++;
-                swap(arr[i], arr[j]);
-            }
+// Function to partition an array using a pivot
+// All values less than the pivot are on the left, and all values greater are on the right
+int partition(int *arr, int left, int right) 
+{
+    // Select the pivot (the rightmost element)
+    int pivot = arr[right]; 
+    // Initialize pointers
+    int lesserValues = left - 1;
+    int greaterValues = left;
+    // Iterate through the array
+    for(; greaterValues < right; greaterValues++)
+    {
+        // If the current value is less than the pivot, move it to the back of lesser values
+        if(arr[greaterValues] < pivot)
+        {
+            // Move the smaller pointer to the back of lesser values
+            lesserValues++;
+            // move the lesser value to left, greater value to the right
+            swap(arr[greaterValues], arr[lesserValues]);
         }
-        swap(arr[i + 1], arr[right]);
-        int partition = i + 1;
-        quickSort(arr, left, partition - 1);
-        quickSort(arr, partition + 1, right);
     }
+    // Move the pivot to its sorted position (between lesser and greater values)
+    lesserValues++;
+    swap(arr[lesserValues], arr[right]);
+    // Return the index of the pivot
+    return lesserValues;
 }
+
+void quickSort(int *arr, int left, int right) 
+{
+    if (left >= right) return; // Base case
+
+    int sortedIndex = partition(arr, left, right);
+    quickSort(arr, left, sortedIndex - 1);
+    quickSort(arr, sortedIndex + 1, right);
+}
+
 
 // Sorting function for each half
 void sortHalf(int *start, int size) {
