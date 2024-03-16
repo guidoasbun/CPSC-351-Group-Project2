@@ -1,41 +1,48 @@
+// Programming Assignment #2, Threads
+// Class: CPSC 351-09 22045
+// Group: 1
+// Members:
+//      - Alex Le
+//      - Conner Robbins
+//      - Harry Derderian
+//      - Guido Asbun
+
 #include <iostream>
 #include <thread>
 #include <algorithm>
 
+using namespace std;
+
 // Global variables as per instructions
-const int SIZE = 11;
-int numbers[SIZE] = {7, 12, 19, 3, 18, 4, 2, -5, 6, 15, 8};
+const int SIZE {11};
+int numbers[SIZE] {7, 12, 19, 3, 18, 4, 2, -5, 6, 15, 8};
 int sortedNumbers[SIZE];
 
 // Function declarations
+int partition(int *arr, int left, int right);
+void quickSort(int *arr, int left, int right);
 void sortHalf(int *start, int size);
 void mergeArray(int mid);
+void printArray(int *arr, int size);
 
-
-using namespace std;
 int main() 
 {
-    int mid = SIZE / 2;
+    int mid {SIZE / 2};
 
-    // threads are created here
+    // threads are created and ran here
     thread sortThread1(sortHalf, numbers, mid);
     thread sortThread2(sortHalf, numbers + mid, SIZE - mid);
-
     // threads are joined here
     sortThread1.join();
     sortThread2.join();
 
-    // merge thread is created here
+    // merge thread is created and ran here
     thread mergeThread(mergeArray, mid);
     // merge thread is joined here
     mergeThread.join();
 
-
-    for (int i = 0; i < SIZE; i++) 
-    {
-        cout << numbers[i] << " ";
-    }
-
+    // Print the sorted array
+    printArray(sortedNumbers, SIZE);
 }
 
 // Function to partition an array using a pivot
@@ -66,6 +73,7 @@ int partition(int *arr, int left, int right)
     return lesserValues;
 }
 
+// Function to sort an array using the quicksort algorithm
 void quickSort(int *arr, int left, int right) 
 {
     if (left >= right) return; // Base case
@@ -75,14 +83,12 @@ void quickSort(int *arr, int left, int right)
     quickSort(arr, sortedIndex + 1, right);
 }
 
-
 // Sorting function for each half
 void sortHalf(int *start, int size) {
     quickSort(start, 0, size - 1);
 }
 
-// TODO: implement merge algorithm 
-// Maybe you can come up with something better
+// Function to merge two sorted arrays
 void mergeArray(int mid) {
     int i = 0, j = mid, k = 0;
     while (i < mid && j < SIZE) {
@@ -101,4 +107,12 @@ void mergeArray(int mid) {
     for (int i = 0; i < SIZE; i++) {
         numbers[i] = sortedNumbers[i];
     }
+}
+
+// Function to print the array
+void printArray(int *arr, int size) {
+    for (int i = 0; i < size; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
 }
