@@ -6,6 +6,8 @@
 //      - Conner Robbins
 //      - Harry Derderian
 //      - Guido Asbun
+// GitHub:
+//      - https://github.com/guidoasbun/CPSC-351-Group-Project2
 
 #include <iostream>
 #include <thread>
